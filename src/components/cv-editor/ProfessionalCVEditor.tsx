@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useGovernmentCVStore } from '@/store/governmentCVStore';
 import { CandidateProfileSection } from './CandidateProfileSection';
 import { ExecutiveSummarySection } from './ExecutiveSummarySection';
@@ -9,9 +9,11 @@ import { LanguageProficiencySection } from './LanguageProficiencySection';
 import { SupplementaryInformationSection } from './SupplementaryInformationSection';
 import { ExtracurricularActivitiesSection } from './ExtracurricularActivitiesSection';
 import { TemplateAppearanceControls } from '../cv-settings/TemplateAppearanceControls';
+import { ImportCVModal } from './ImportCVModal';
 
 export const ProfessionalCVEditor: React.FC = () => {
   const { updateCVData } = useGovernmentCVStore();
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   const handleGenerateDemoCV = () => {
     const demoData = {
@@ -171,12 +173,20 @@ export const ProfessionalCVEditor: React.FC = () => {
           <h1 className="text-xl font-bold tracking-tight text-gray-900">CVForge Editor</h1>
           <p className="text-xs text-gray-500 font-medium text-blue-600">Government Digital Transformation Mode</p>
         </div>
-        <button
-          onClick={handleGenerateDemoCV}
-          className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1.5"
-        >
-          <span>✨</span> Generate Demo CV
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setIsImportModalOpen(true)}
+            className="px-3.5 py-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm border border-gray-300 hover:border-gray-400 transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+          >
+            <span>📁</span> Import Existing CV
+          </button>
+          <button
+            onClick={handleGenerateDemoCV}
+            className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1.5"
+          >
+            <span>✨</span> Generate Demo CV
+          </button>
+        </div>
       </div>
       
       <div className="flex-1 overflow-y-auto p-6 space-y-8 pb-32 custom-scrollbar">
@@ -200,6 +210,7 @@ export const ProfessionalCVEditor: React.FC = () => {
           </div>
         </details>
       </div>
+      <ImportCVModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
     </div>
   );
 };
