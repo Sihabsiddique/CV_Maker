@@ -1,21 +1,65 @@
 import React from 'react';
 import { GovernmentCVData } from '@/types/governmentCV.types';
+import { useGovernmentCVStore } from '@/store/governmentCVStore';
 
 interface TemplateProps {
   data: GovernmentCVData;
 }
 
 export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const { appearanceSettings } = useGovernmentCVStore();
+
+  // Calculate text colors based on darkness percentage
+  const textVal = Math.round(180 * (1 - appearanceSettings.textDarkness / 100));
+  const textColor = `rgb(${textVal},${textVal},${textVal})`;
+  const headingColor = appearanceSettings.textDarkness === 100 ? '#000000' : textColor;
+
+  const nameStyles: React.CSSProperties = {
+    fontSize: `${appearanceSettings.candidateNameSize}px`,
+    fontWeight: appearanceSettings.candidateNameWeight as any,
+    color: headingColor,
+  };
+
+  const contactStyles: React.CSSProperties = {
+    fontSize: `${appearanceSettings.contactInfoSize}px`,
+    color: textColor,
+  };
+
+  const headingStyles: React.CSSProperties = {
+    fontSize: `${appearanceSettings.sectionHeadingSize}px`,
+    fontWeight: appearanceSettings.sectionHeadingWeight as any,
+    color: headingColor,
+  };
+
+  const bodyStyles: React.CSSProperties = {
+    fontSize: `${appearanceSettings.bodyTextSize}px`,
+    color: textColor,
+  };
+
+  const experienceStyles: React.CSSProperties = {
+    fontSize: `${appearanceSettings.experienceDescriptionSize}px`,
+    color: textColor,
+  };
+
+  const dividerStyles: React.CSSProperties = {
+    borderColor: appearanceSettings.borderColor,
+    borderTopWidth: `${appearanceSettings.borderThickness}px`,
+    opacity: appearanceSettings.borderOpacity / 100,
+    width: `${appearanceSettings.borderWidthPercent}%`,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  };
+
   return (
-    <div className="w-[210mm] min-h-[297mm] bg-white text-[#333333] font-sans box-border p-[25.4mm] shadow-lg mx-auto print:shadow-none print:w-auto print:min-h-auto print:p-0">
+    <div className="w-[210mm] min-h-[297mm] bg-white font-sans box-border p-[25.4mm] shadow-lg mx-auto print:shadow-none print:w-auto print:min-h-auto print:p-0">
       
       {/* Header section */}
       <div className="text-center mb-[18pt]">
-        <h1 className="text-[24pt] font-bold text-black mb-[4pt] leading-none">
+        <h1 style={nameStyles} className="mb-[4pt] leading-none">
           {data.personalInfo.fullName || 'First Name Last Name'}
         </h1>
-        <hr className="mt-[8pt] mb-[8pt] border-t border-black" />
-        <div className="text-[10pt] leading-tight text-gray-800">
+        <hr style={dividerStyles} className="mt-[8pt] mb-[8pt] border-t" />
+        <div style={contactStyles} className="leading-tight">
           <p className="mb-[2pt]">
             {data.personalInfo.address || 'Address'} | {data.personalInfo.email || 'email@example.com'}
           </p>
@@ -23,12 +67,12 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
             {data.personalInfo.linkedin || 'LinkedIn'} | Contact: {data.personalInfo.phone || 'Phone'}
           </p>
         </div>
-        <hr className="mt-[8pt] border-t border-black" />
+        <hr style={dividerStyles} className="mt-[8pt] border-t" />
       </div>
 
       {/* Summary */}
       {data.summary && (
-        <div className="mb-[12pt] text-[10pt] text-justify leading-[1.4]">
+        <div style={bodyStyles} className="mb-[12pt] text-justify leading-[1.4]">
           <p>{data.summary}</p>
         </div>
       )}
@@ -36,9 +80,9 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
       {/* Skills */}
       {data.skills.length > 0 && (
         <div className="mb-[12pt]">
-          <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Skills</h2>
-          <hr className="border-t border-black mb-[8pt]" />
-          <ul className="list-disc ml-[18pt] text-[10pt] leading-[1.4]">
+          <h2 style={headingStyles} className="uppercase leading-none mb-1">Skills</h2>
+          <hr style={dividerStyles} className="mb-[8pt] border-t" />
+          <ul style={bodyStyles} className="list-disc ml-[18pt] leading-[1.4]">
             {data.skills.map((skill) => (
               <li key={skill.id} className="pl-1">
                 <strong>{skill.category}:</strong> {skill.skills}
@@ -51,20 +95,20 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
       {/* Work Experience */}
       {data.experience.length > 0 && (
         <div className="mb-[12pt]">
-          <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Work Experience</h2>
-          <hr className="border-t border-black mb-[8pt]" />
+          <h2 style={headingStyles} className="uppercase leading-none mb-1">Work Experience</h2>
+          <hr style={dividerStyles} className="mb-[8pt] border-t" />
           {data.experience.map((exp) => (
-            <div key={exp.id} className="mb-[12pt] text-[10pt] leading-[1.4]">
+            <div key={exp.id} style={bodyStyles} className="mb-[12pt] leading-[1.4]">
               <div className="flex justify-between">
-                <span className="font-bold">{exp.jobTitle}</span>
+                <span className="font-bold" style={{ color: headingColor }}>{exp.jobTitle}</span>
                 <span>{exp.location}{exp.location ? '. ' : ''}{exp.startDate} - {exp.isCurrent ? 'Present' : exp.endDate}</span>
               </div>
               {exp.company && <div className="mb-[4pt]">{exp.company}</div>}
               {exp.responsibilities && exp.responsibilities.length > 0 && (
-                <div className="mb-[4pt] text-justify">{exp.responsibilities.join(' ')}</div>
+                <div style={experienceStyles} className="mb-[4pt] text-justify">{exp.responsibilities.join(' ')}</div>
               )}
               {exp.achievements.length > 0 && (
-                <ul className="list-disc ml-[18pt]">
+                <ul style={experienceStyles} className="list-disc ml-[18pt]">
                   {exp.achievements.map((achievement, idx) => (
                     <li key={idx} className="pl-1 mb-[2pt]">{achievement}</li>
                   ))}
@@ -78,12 +122,12 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
       {/* Education */}
       {data.education.length > 0 && (
         <div className="mb-[12pt]">
-          <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Education and Training</h2>
-          <hr className="border-t border-black mb-[8pt]" />
+          <h2 style={headingStyles} className="uppercase leading-none mb-1">Education and Training</h2>
+          <hr style={dividerStyles} className="mb-[8pt] border-t" />
           {data.education.map((edu) => (
-            <div key={edu.id} className="mb-[8pt] text-[10pt] leading-[1.4]">
+            <div key={edu.id} style={bodyStyles} className="mb-[8pt] leading-[1.4]">
               <div className="flex justify-between">
-                <span className="font-bold">{edu.degree}</span>
+                <span className="font-bold" style={{ color: headingColor }}>{edu.degree}</span>
                 <span>{edu.startDate} - {edu.endDate || 'Present'}</span>
               </div>
               <div className="flex justify-between">
@@ -98,9 +142,9 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
       {/* Language */}
       {data.languages.length > 0 && (
         <div className="mb-[12pt]">
-          <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Language Proficiency</h2>
-          <hr className="border-t border-black mb-[8pt]" />
-          <ul className="list-disc ml-[18pt] text-[10pt] leading-[1.4]">
+          <h2 style={headingStyles} className="uppercase leading-none mb-1">Language Proficiency</h2>
+          <hr style={dividerStyles} className="mb-[8pt] border-t" />
+          <ul style={bodyStyles} className="list-disc ml-[18pt] leading-[1.4]">
             {data.languages.map((lang) => (
               <li key={lang.id} className="pl-1">
                 <strong>{lang.name}:</strong> {lang.fluency}
@@ -113,9 +157,9 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
       {/* Extracurricular */}
       {data.extracurricular.length > 0 && (
         <div className="mb-[12pt]">
-          <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Extracurricular Activities:</h2>
-          <hr className="border-t border-black mb-[8pt]" />
-          <ul className="list-disc ml-[18pt] text-[10pt] leading-[1.4]">
+          <h2 style={headingStyles} className="uppercase leading-none mb-1">Extracurricular Activities:</h2>
+          <hr style={dividerStyles} className="mb-[8pt] border-t" />
+          <ul style={bodyStyles} className="list-disc ml-[18pt] leading-[1.4]">
             {data.extracurricular.map((item) => (
               <li key={item.id} className="pl-1">
                 <strong>{item.role},</strong> {item.organization}
@@ -127,9 +171,9 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
 
       {/* Personal Information */}
       <div className="mb-[12pt]">
-        <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Personal Information</h2>
-        <hr className="border-t border-black mb-[8pt]" />
-        <div className="text-[10pt] leading-[1.4] grid grid-cols-[140px_1fr] gap-x-2">
+        <h2 style={headingStyles} className="uppercase leading-none mb-1">Personal Information</h2>
+        <hr style={dividerStyles} className="mb-[8pt] border-t" />
+        <div style={bodyStyles} className="leading-[1.4] grid grid-cols-[140px_1fr] gap-x-2">
           {data.personalInfo.fatherName && (
              <><div>Father&apos;s Name</div><div>: {data.personalInfo.fatherName}</div></>
           )}
@@ -160,9 +204,9 @@ export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data
       {/* Certifications */}
       {data.certifications.length > 0 && (
         <div className="mb-[12pt]">
-          <h2 className="text-[12pt] font-bold uppercase text-black leading-none mb-1">Additional Information</h2>
-          <hr className="border-t border-black mb-[8pt]" />
-          <ul className="list-disc ml-[18pt] text-[10pt] leading-[1.4]">
+          <h2 style={headingStyles} className="uppercase leading-none mb-1">Additional Information</h2>
+          <hr style={dividerStyles} className="mb-[8pt] border-t" />
+          <ul style={bodyStyles} className="list-disc ml-[18pt] leading-[1.4]">
             <li className="pl-1">
               <strong>Certifications: </strong>
               {data.certifications.map(c => c.name).join(', ')}

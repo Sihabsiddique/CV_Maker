@@ -8,6 +8,7 @@ import { AcademicQualificationSection } from './AcademicQualificationSection';
 import { LanguageProficiencySection } from './LanguageProficiencySection';
 import { SupplementaryInformationSection } from './SupplementaryInformationSection';
 import { ExtracurricularActivitiesSection } from './ExtracurricularActivitiesSection';
+import { TemplateAppearanceControls } from '../cv-settings/TemplateAppearanceControls';
 
 export const ProfessionalCVEditor: React.FC = () => {
   const { updateCVData } = useGovernmentCVStore();
@@ -106,7 +107,7 @@ export const ProfessionalCVEditor: React.FC = () => {
             'Managed database schema migrations and query optimizations for high-traffic transaction processing systems.'
           ],
           achievements: [
-            'Engineered a backend search API using ASP.NET and PostgreSQL that reduced query latency by 50% for 1.2 daily active users.',
+            'Engineered a backend search API using ASP.NET and PostgreSQL that reduced query latency by 50% for 1.2 million daily active users.',
             'Introduced continuous integration and deployment (CI/CD) pipelines using Git and Jenkins, reducing release cycles from bi-weekly to daily.'
           ]
         },
@@ -187,6 +188,17 @@ export const ProfessionalCVEditor: React.FC = () => {
         <LanguageProficiencySection />
         <SupplementaryInformationSection />
         <ExtracurricularActivitiesSection />
+        
+        {/* Style Settings Section */}
+        <details className="group border border-gray-200 bg-white rounded-lg transition-all duration-300">
+          <summary className="p-4 font-bold text-sm text-gray-800 cursor-pointer list-none flex justify-between items-center select-none bg-gray-50 rounded-t-lg group-open:border-b group-open:border-gray-200">
+            <span>🎨 Document Style Settings</span>
+            <span className="text-gray-400 group-open:rotate-180 transition-transform duration-200">▼</span>
+          </summary>
+          <div className="p-4 bg-white rounded-b-lg">
+            <TemplateAppearanceControls />
+          </div>
+        </details>
       </div>
     </div>
   );

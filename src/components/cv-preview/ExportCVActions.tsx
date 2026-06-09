@@ -6,7 +6,7 @@ import { GovernmentCVPdfExporter } from '@/exports/governmentCVPdfExporter';
 import { generateGovernmentCVDocx } from '@/exports/governmentCVDocxExporter';
 
 export const ExportCVActions: React.FC = () => {
-  const { cvData } = useGovernmentCVStore();
+  const { cvData, appearanceSettings } = useGovernmentCVStore();
   const [isExportingPDF, setIsExportingPDF] = useState(false);
   const [isExportingDOCX, setIsExportingDOCX] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -23,7 +23,7 @@ export const ExportCVActions: React.FC = () => {
     setIsExportingPDF(true);
     try {
       // Compile the PDF doc component into a blob
-      const blob = await pdf(<GovernmentCVPdfExporter data={cvData} />).toBlob();
+      const blob = await pdf(<GovernmentCVPdfExporter data={cvData} settings={appearanceSettings} />).toBlob();
       
       // Exact browser download logic as requested
       const url = window.URL.createObjectURL(blob);
@@ -47,7 +47,7 @@ export const ExportCVActions: React.FC = () => {
     if (isExportingPDF || isExportingDOCX) return;
     setIsExportingDOCX(true);
     try {
-      const doc = generateGovernmentCVDocx(cvData);
+      const doc = generateGovernmentCVDocx(cvData, appearanceSettings);
       const blob = await Packer.toBlob(doc);
       
       // Exact browser download logic as requested
