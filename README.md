@@ -1,6 +1,6 @@
-# CVForge - Government Professional CV Builder
+# CVForge - Professional ATS CV Builder
 
-This is a Next.js project bootstrapped with `create-next-app` for building professional government-compliant curriculum vitae (CV).
+This is a Next.js project bootstrapped with `create-next-app` for building professional-compliant curriculum vitae (CV).
 
 ## Getting Started
 
