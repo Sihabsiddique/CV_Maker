@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useGovernmentCVStore } from '@/store/governmentCVStore';
 import { pdf } from '@react-pdf/renderer';
 import { Packer } from 'docx';
+import { saveAs } from 'file-saver';
+import { toast } from 'sonner';
+import { FileDown, FileText, Loader2 } from 'lucide-react';
 import { GovernmentCVPdfExporter } from '@/exports/governmentCVPdfExporter';
 import { generateGovernmentCVDocx } from '@/exports/governmentCVDocxExporter';
 
@@ -9,35 +12,19 @@ export const ExportCVActions: React.FC = () => {
   const { cvData, appearanceSettings } = useGovernmentCVStore();
   const [isExportingPDF, setIsExportingPDF] = useState(false);
   const [isExportingDOCX, setIsExportingDOCX] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-  const showToast = (message: string, type: 'success' | 'error') => {
-    setToast({ message, type });
-    setTimeout(() => {
-      setToast(null);
-    }, 4000);
-  };
 
   const handleDownloadPDF = async () => {
     if (isExportingPDF || isExportingDOCX) return;
     setIsExportingPDF(true);
     try {
-      // Compile the PDF doc component into a blob
       const blob = await pdf(<GovernmentCVPdfExporter data={cvData} settings={appearanceSettings} />).toBlob();
-      
-      // Exact browser download logic as requested
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
       const filename = `${(cvData.personalInfo.fullName || 'Michael_Anderson').replace(/\s+/g, '_')}_CV.pdf`;
-      a.download = filename;
-      a.click();
-      window.URL.revokeObjectURL(url);
       
-      showToast("PDF downloaded successfully", "success");
+      saveAs(blob, filename);
+      toast.success("PDF downloaded successfully");
     } catch (error) {
       console.error('PDF Export Audit Error:', error);
-      showToast("PDF generation failed", "error");
+      toast.error("PDF generation failed");
     } finally {
       setIsExportingPDF(false);
     }
@@ -49,20 +36,13 @@ export const ExportCVActions: React.FC = () => {
     try {
       const doc = generateGovernmentCVDocx(cvData, appearanceSettings);
       const blob = await Packer.toBlob(doc);
-      
-      // Exact browser download logic as requested
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
       const filename = `${(cvData.personalInfo.fullName || 'Michael_Anderson').replace(/\s+/g, '_')}_CV.docx`;
-      a.download = filename;
-      a.click();
-      window.URL.revokeObjectURL(url);
       
-      showToast("DOCX downloaded successfully", "success");
+      saveAs(blob, filename);
+      toast.success("DOCX downloaded successfully");
     } catch (error) {
       console.error('DOCX Export Audit Error:', error);
-      showToast("DOCX generation failed", "error");
+      toast.error("DOCX generation failed");
     } finally {
       setIsExportingDOCX(false);
     }
@@ -70,18 +50,6 @@ export const ExportCVActions: React.FC = () => {
 
   return (
     <div className="flex items-center gap-3 relative">
-      {/* Custom Toast Alert */}
-      {toast && (
-        <div className={`fixed top-4 right-4 z-50 flex items-center p-4 rounded-lg shadow-lg border text-xs font-semibold transition-all duration-300 transform translate-y-0 ${
-          toast.type === 'success' 
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-            : 'bg-rose-50 border-rose-200 text-rose-800'
-        }`}>
-          <span className="mr-2">{toast.type === 'success' ? '✓' : '⚠️'}</span>
-          <span>{toast.message}</span>
-        </div>
-      )}
-
       <button
         onClick={handleDownloadDOCX}
         disabled={isExportingPDF || isExportingDOCX}
@@ -91,11 +59,14 @@ export const ExportCVActions: React.FC = () => {
       >
         {isExportingDOCX ? (
           <>
-            <span className="w-3.5 h-3.5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></span>
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
             Generating DOCX...
           </>
         ) : (
-          "Download DOCX"
+          <>
+            <FileText className="w-3.5 h-3.5 text-blue-600" />
+            Download DOCX
+          </>
         )}
       </button>
 
@@ -108,11 +79,14 @@ export const ExportCVActions: React.FC = () => {
       >
         {isExportingPDF ? (
           <>
-            <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+            <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
             Generating PDF...
           </>
         ) : (
-          "Download PDF"
+          <>
+            <FileDown className="w-3.5 h-3.5 text-white" />
+            Download PDF
+          </>
         )}
       </button>
     </div>

@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Sparkles, FolderOpen } from 'lucide-react';
 import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { governmentCVSchema } from '@/utils/governmentCVSchema';
 import { CandidateProfileSection } from './CandidateProfileSection';
 import { ExecutiveSummarySection } from './ExecutiveSummarySection';
 import { CompetencyProfileSection } from './CompetencyProfileSection';
@@ -12,8 +16,30 @@ import { TemplateAppearanceControls } from '../cv-settings/TemplateAppearanceCon
 import { ImportCVModal } from './ImportCVModal';
 
 export const ProfessionalCVEditor: React.FC = () => {
-  const { updateCVData } = useGovernmentCVStore();
+  const { cvData, updateCVData } = useGovernmentCVStore();
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+
+  // Initialize react-hook-form with Zod resolver casted to any to prevent schema assignment issues
+  const methods = useForm<any>({
+    resolver: zodResolver(governmentCVSchema) as any,
+    defaultValues: cvData,
+    mode: 'onChange',
+  });
+
+  const { watch, reset } = methods;
+
+  // Sync form inputs when Zustand store changes externally (e.g. Generate Demo or CV Import)
+  useEffect(() => {
+    reset(cvData);
+  }, [cvData, reset]);
+
+  // Real-time synchronization to Zustand store for instant Live HTML Preview updating
+  useEffect(() => {
+    const subscription = watch((value) => {
+      updateCVData(value as any);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, updateCVData]);
 
   const handleGenerateDemoCV = () => {
     const demoData = {
@@ -167,50 +193,52 @@ export const ProfessionalCVEditor: React.FC = () => {
   };
 
   return (
-    <div className="w-[45%] h-full bg-white border-r border-gray-200 flex flex-col z-10 shadow-lg">
-      <div className="p-4 border-b border-gray-100 bg-white shrink-0 flex justify-between items-center">
-        <div>
-          <h1 className="text-xl font-bold tracking-tight text-gray-900">CVForge Editor</h1>
-          <p className="text-xs text-gray-500 font-medium text-blue-600">Government Digital Transformation Mode</p>
-        </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setIsImportModalOpen(true)}
-            className="px-3.5 py-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm border border-gray-300 hover:border-gray-400 transition-all duration-200 cursor-pointer flex items-center gap-1.5"
-          >
-            <span>📁</span> Import Existing CV
-          </button>
-          <button
-            onClick={handleGenerateDemoCV}
-            className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1.5"
-          >
-            <span>✨</span> Generate Demo CV
-          </button>
-        </div>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto p-6 space-y-8 pb-32 custom-scrollbar">
-        <CandidateProfileSection />
-        <ExecutiveSummarySection />
-        <CompetencyProfileSection />
-        <ProfessionalExperienceSection />
-        <AcademicQualificationSection />
-        <LanguageProficiencySection />
-        <SupplementaryInformationSection />
-        <ExtracurricularActivitiesSection />
-        
-        {/* Style Settings Section */}
-        <details className="group border border-gray-200 bg-white rounded-lg transition-all duration-300">
-          <summary className="p-4 font-bold text-sm text-gray-800 cursor-pointer list-none flex justify-between items-center select-none bg-gray-50 rounded-t-lg group-open:border-b group-open:border-gray-200">
-            <span>🎨 Document Style Settings</span>
-            <span className="text-gray-400 group-open:rotate-180 transition-transform duration-200">▼</span>
-          </summary>
-          <div className="p-4 bg-white rounded-b-lg">
-            <TemplateAppearanceControls />
+    <FormProvider {...methods}>
+      <div className="w-[45%] h-full bg-white border-r border-gray-200 flex flex-col z-10 shadow-lg">
+        <div className="p-4 border-b border-gray-100 bg-white shrink-0 flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-gray-900">CVForge Editor</h1>
+            <p className="text-xs text-gray-500 font-medium text-blue-600">Government Digital Transformation Mode</p>
           </div>
-        </details>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setIsImportModalOpen(true)}
+              className="px-3.5 py-2 bg-white hover:bg-gray-50 text-gray-700 text-xs font-semibold rounded-lg shadow-sm border border-gray-300 hover:border-gray-400 transition-all duration-200 cursor-pointer flex items-center gap-1.5"
+            >
+              <FolderOpen className="w-4 h-4 text-gray-500" /> Import Existing CV
+            </button>
+            <button
+              onClick={handleGenerateDemoCV}
+              className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer flex items-center gap-1.5"
+            >
+              <Sparkles className="w-4 h-4 text-white animate-pulse" /> Generate Demo CV
+            </button>
+          </div>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-6 space-y-8 pb-32 custom-scrollbar">
+          <CandidateProfileSection />
+          <ExecutiveSummarySection />
+          <CompetencyProfileSection />
+          <ProfessionalExperienceSection />
+          <AcademicQualificationSection />
+          <LanguageProficiencySection />
+          <SupplementaryInformationSection />
+          <ExtracurricularActivitiesSection />
+          
+          {/* Style Settings Section */}
+          <details className="group border border-gray-200 bg-white rounded-lg transition-all duration-300">
+            <summary className="p-4 font-bold text-sm text-gray-800 cursor-pointer list-none flex justify-between items-center select-none bg-gray-50 rounded-t-lg group-open:border-b group-open:border-gray-200">
+              <span>🎨 Document Style Settings</span>
+              <span className="text-gray-400 group-open:rotate-180 transition-transform duration-200">▼</span>
+            </summary>
+            <div className="p-4 bg-white rounded-b-lg">
+              <TemplateAppearanceControls />
+            </div>
+          </details>
+        </div>
+        <ImportCVModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
       </div>
-      <ImportCVModal isOpen={isImportModalOpen} onClose={() => setIsImportModalOpen(false)} />
-    </div>
+    </FormProvider>
   );
 };

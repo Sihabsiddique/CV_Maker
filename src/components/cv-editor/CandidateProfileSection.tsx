@@ -1,12 +1,9 @@
 import React from 'react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useFormContext } from 'react-hook-form';
 
 export const CandidateProfileSection: React.FC = () => {
-  const { cvData, updateCVData } = useGovernmentCVStore();
-
-  const updatePersonalInfo = (field: string, value: string) => {
-    updateCVData({ personalInfo: { ...cvData.personalInfo, [field]: value } });
-  };
+  const { register, formState: { errors } } = useFormContext<any>();
+  const personalErrors = errors.personalInfo as any;
 
   return (
     <div className="space-y-4">
@@ -16,46 +13,61 @@ export const CandidateProfileSection: React.FC = () => {
           <label className="block text-xs font-medium text-gray-700 mb-1">Full Name</label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            value={cvData.personalInfo.fullName}
-            onChange={(e) => updatePersonalInfo('fullName', e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-800"
+            {...register('personalInfo.fullName')}
           />
+          {personalErrors?.fullName && (
+            <p className="text-[10px] text-rose-500 font-semibold mt-1">
+              {personalErrors.fullName.message}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
           <input
             type="email"
-            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            value={cvData.personalInfo.email}
-            onChange={(e) => updatePersonalInfo('email', e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-800"
+            {...register('personalInfo.email')}
           />
+          {personalErrors?.email && (
+            <p className="text-[10px] text-rose-500 font-semibold mt-1">
+              {personalErrors.email.message}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">Phone</label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            value={cvData.personalInfo.phone}
-            onChange={(e) => updatePersonalInfo('phone', e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-800"
+            {...register('personalInfo.phone')}
           />
+          {personalErrors?.phone && (
+            <p className="text-[10px] text-rose-500 font-semibold mt-1">
+              {personalErrors.phone.message}
+            </p>
+          )}
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">LinkedIn</label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            value={cvData.personalInfo.linkedin || ''}
-            onChange={(e) => updatePersonalInfo('linkedin', e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-800"
+            {...register('personalInfo.linkedin')}
           />
         </div>
         <div className="col-span-2">
           <label className="block text-xs font-medium text-gray-700 mb-1">Address</label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            value={cvData.personalInfo.address}
-            onChange={(e) => updatePersonalInfo('address', e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded focus:ring-1 focus:ring-blue-500 focus:border-blue-500 outline-none font-semibold text-gray-800"
+            {...register('personalInfo.address')}
           />
+          {personalErrors?.address && (
+            <p className="text-[10px] text-rose-500 font-semibold mt-1">
+              {personalErrors.address.message}
+            </p>
+          )}
         </div>
       </div>
     </div>
