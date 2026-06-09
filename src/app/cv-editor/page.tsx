@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { ProfessionalCVEditor } from '@/components/cv-editor/ProfessionalCVEditor';
-import { GovernmentCVPreview } from '@/components/cv-preview/GovernmentCVPreview';
+import { CVPreview } from '@/components/cv-preview/CVPreview';
 
 export default function CVEditorPage() {
   const [mounted, setMounted] = useState(false);
@@ -17,7 +17,7 @@ export default function CVEditorPage() {
   return (
     <div className="flex h-screen w-full bg-[#f3f4f6] overflow-hidden font-sans text-sm">
       <ProfessionalCVEditor />
-      <GovernmentCVPreview />
+      <CVPreview />
     </div>
   );
 }

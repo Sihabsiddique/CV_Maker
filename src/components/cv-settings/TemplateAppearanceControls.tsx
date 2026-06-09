@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useCVStore } from '@/store/cvStore';
 
 export const TemplateAppearanceControls: React.FC = () => {
-  const { appearanceSettings, updateAppearanceSettings, resetAppearanceSettings } = useGovernmentCVStore();
+  const { appearanceSettings, updateAppearanceSettings, resetAppearanceSettings } = useCVStore();
 
   const handleSliderChange = (key: keyof typeof appearanceSettings, value: number) => {
     updateAppearanceSettings({ [key]: value });

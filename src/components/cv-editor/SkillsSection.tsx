@@ -1,10 +1,10 @@
 import React from 'react';
 import { useFormContext, useFieldArray } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
-import { GovernmentCVFormValues } from '@/utils/governmentCVSchema';
+import { CVFormValues } from '@/utils/cvSchema';
 
-export const CompetencyProfileSection: React.FC = () => {
-  const { register, control } = useFormContext<GovernmentCVFormValues>();
+export const SkillsSection: React.FC = () => {
+  const { register, control } = useFormContext<CVFormValues>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'skills'

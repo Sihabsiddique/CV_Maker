@@ -12,7 +12,7 @@ export default function RootPage() {
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gray-50 text-xs font-semibold text-gray-500">
-      Redirecting to Government CV Editor...
+      Redirecting to CV Architect...
     </div>
   );
 }

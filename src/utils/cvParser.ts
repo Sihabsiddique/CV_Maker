@@ -212,7 +212,7 @@ export function parseRawTextToCVData(rawText: string, filename: string): ParsedC
     }
   }
   
-  // Dynamic Govt fields
+  // Dynamic Additional fields
   let fatherName = '';
   let motherName = '';
   let dateOfBirth = '';
@@ -667,7 +667,7 @@ export function parseRawTextToCVData(rawText: string, filename: string): ParsedC
   if (rawLower.includes('mother tongue') || rawLower.includes('cefr') || rawLower.includes('europass')) {
     detectedType = 'Europass CV';
   } else if (rawLower.includes("father's name") || rawLower.includes("mother's name") || rawLower.includes('religion') || rawLower.includes('nationality: bangladeshi')) {
-    detectedType = 'Government CV';
+    detectedType = 'ATS CV';
   } else if (rawLower.includes('united nations') || rawLower.includes('personal history profile') || rawLower.includes('p11')) {
     detectedType = 'UN CV';
   } else if (lines.length < 35 && (rawLower.includes('portfolio') || rawLower.includes('designer') || rawLower.includes('artwork'))) {

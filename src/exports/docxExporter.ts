@@ -1,5 +1,5 @@
 import { Document, Paragraph, TextRun, BorderStyle, AlignmentType, WidthType, Table, TableRow, TableCell } from 'docx';
-import { GovernmentCVData, AppearanceSettings } from '@/types/governmentCV.types';
+import { CVData, AppearanceSettings } from '@/types/cv.types';
 
 // Helper to blend color hex with white background for opacity simulation
 const getBorderHexColor = (colorHex: string, opacity: number): string => {
@@ -25,7 +25,7 @@ const getTextHexColor = (darkness: number): string => {
   return `${hex}${hex}${hex}`;
 };
 
-export const generateGovernmentCVDocx = (data: GovernmentCVData, settings: AppearanceSettings): Document => {
+export const generateDocx = (data: CVData, settings: AppearanceSettings): Document => {
   const FONT = 'Arial'; 
   const COLOR_TEXT = getTextHexColor(settings.textDarkness);
   const COLOR_HEADING = settings.textDarkness === 100 ? '000000' : COLOR_TEXT;

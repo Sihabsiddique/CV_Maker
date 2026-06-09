@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-export const CandidateProfileSection: React.FC = () => {
+export const ProfileSection: React.FC = () => {
   const { register, formState: { errors } } = useFormContext<any>();
   const personalErrors = errors.personalInfo as any;
 

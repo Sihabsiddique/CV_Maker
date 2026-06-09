@@ -1,6 +1,6 @@
-# CVForge - Professional ATS CV Builder
+# CV Architect - ATS Structured Resume Design
 
-This is a Next.js project bootstrapped with `create-next-app` for building professional-compliant curriculum vitae (CV).
+This is a Next.js project bootstrapped with `create-next-app` for building professional ATS-structured resumes.
 
 ## Getting Started
 

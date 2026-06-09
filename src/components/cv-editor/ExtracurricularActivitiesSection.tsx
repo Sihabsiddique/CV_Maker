@@ -1,10 +1,10 @@
 import React from 'react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useCVStore } from '@/store/cvStore';
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export const ExtracurricularActivitiesSection: React.FC = () => {
-  const { cvData, updateCVData } = useGovernmentCVStore();
+  const { cvData, updateCVData } = useCVStore();
 
   const addActivity = () => {
     updateCVData({

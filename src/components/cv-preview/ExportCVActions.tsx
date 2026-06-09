@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useCVStore } from '@/store/cvStore';
 import { pdf } from '@react-pdf/renderer';
 import { Packer } from 'docx';
 import { saveAs } from 'file-saver';
 import { toast } from 'sonner';
 import { FileDown, FileText, Loader2 } from 'lucide-react';
-import { GovernmentCVPdfExporter } from '@/exports/governmentCVPdfExporter';
-import { generateGovernmentCVDocx } from '@/exports/governmentCVDocxExporter';
+import { PDFExporter } from '@/exports/pdfExporter';
+import { generateDocx } from '@/exports/docxExporter';
 
 export const ExportCVActions: React.FC = () => {
-  const { cvData, appearanceSettings } = useGovernmentCVStore();
+  const { cvData, appearanceSettings } = useCVStore();
   const [isExportingPDF, setIsExportingPDF] = useState(false);
   const [isExportingDOCX, setIsExportingDOCX] = useState(false);
 
@@ -17,7 +17,7 @@ export const ExportCVActions: React.FC = () => {
     if (isExportingPDF || isExportingDOCX) return;
     setIsExportingPDF(true);
     try {
-      const blob = await pdf(<GovernmentCVPdfExporter data={cvData} settings={appearanceSettings} />).toBlob();
+      const blob = await pdf(<PDFExporter data={cvData} settings={appearanceSettings} />).toBlob();
       const filename = `${(cvData.personalInfo.fullName || 'Michael_Anderson').replace(/\s+/g, '_')}_CV.pdf`;
       
       saveAs(blob, filename);
@@ -34,7 +34,7 @@ export const ExportCVActions: React.FC = () => {
     if (isExportingPDF || isExportingDOCX) return;
     setIsExportingDOCX(true);
     try {
-      const doc = generateGovernmentCVDocx(cvData, appearanceSettings);
+      const doc = generateDocx(cvData, appearanceSettings);
       const blob = await Packer.toBlob(doc);
       const filename = `${(cvData.personalInfo.fullName || 'Michael_Anderson').replace(/\s+/g, '_')}_CV.docx`;
       

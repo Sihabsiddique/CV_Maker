@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useCVStore } from '@/store/cvStore';
 
 export const ExecutiveSummarySection: React.FC = () => {
-  const { cvData, updateCVData } = useGovernmentCVStore();
+  const { cvData, updateCVData } = useCVStore();
 
   return (
     <div className="space-y-4">

@@ -1,13 +1,13 @@
 import React from 'react';
-import { GovernmentCVData } from '@/types/governmentCV.types';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { CVData } from '@/types/cv.types';
+import { useCVStore } from '@/store/cvStore';
 
 interface TemplateProps {
-  data: GovernmentCVData;
+  data: CVData;
 }
 
-export const GovernmentProfessionalCVTemplate: React.FC<TemplateProps> = ({ data }) => {
-  const { appearanceSettings } = useGovernmentCVStore();
+export const ExecutiveResumeTemplate: React.FC<TemplateProps> = ({ data }) => {
+  const { appearanceSettings } = useCVStore();
 
   // Calculate text colors based on darkness percentage
   const textVal = Math.round(180 * (1 - appearanceSettings.textDarkness / 100));

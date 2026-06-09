@@ -1,8 +1,8 @@
 import React from 'react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useCVStore } from '@/store/cvStore';
 
 export const CVDesignControls: React.FC = () => {
-  const { activeTemplateId, setTemplate } = useGovernmentCVStore();
+  const { activeTemplateId, setTemplate } = useCVStore();
 
   return (
     <div className="bg-white border-b border-gray-200 p-4 shrink-0 flex items-center justify-between gap-4">
@@ -19,7 +19,7 @@ export const CVDesignControls: React.FC = () => {
               : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
           }`}
         >
-          Executive Government
+          Executive Professional
         </button>
         <button
           onClick={() => setTemplate('modern')}

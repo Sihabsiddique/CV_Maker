@@ -58,7 +58,7 @@ export interface ProfessionalCertification {
   name: string;
 }
 
-export interface GovernmentCVData {
+export interface CVData {
   personalInfo: CandidateProfile; // Match store state keys for simplicity, but typed as CandidateProfile
   summary: string;
   skills: Competency[];
@@ -69,7 +69,7 @@ export interface GovernmentCVData {
   certifications: ProfessionalCertification[];
 }
 
-export const initialGovernmentCVData: GovernmentCVData = {
+export const initialCVData: CVData = {
   personalInfo: {
     fullName: 'Ahmed Rahman',
     address: 'House 12, Road 5, Dhanmondi, Dhaka',
@@ -85,7 +85,7 @@ export const initialGovernmentCVData: GovernmentCVData = {
     religion: 'Islam',
     permanentAddress: 'Comilla, Bangladesh'
   },
-  summary: 'Results-driven ICT and Digital Transformation professional with experience in government projects, policy implementation, stakeholder engagement, project coordination, and technology leadership. Proven ability to manage cross-functional teams, support digital governance initiatives, and deliver technology-enabled public services. Skilled in strategic planning, policy research, project management, and digital innovation.',
+  summary: 'Results-driven ICT and Digital Transformation professional with experience in enterprise projects, policy implementation, stakeholder engagement, project coordination, and technology leadership. Proven ability to manage cross-functional teams, support digital governance initiatives, and deliver technology-enabled public services. Skilled in strategic planning, policy research, project management, and digital innovation.',
   skills: [
     { id: 'sk1', category: 'Languages & Frameworks', skills: 'C#, ASP.NET Core, JavaScript, TypeScript, React, Next.js' },
     { id: 'sk2', category: 'Database', skills: 'MySQL, PostgreSQL' },
@@ -127,7 +127,7 @@ export const initialGovernmentCVData: GovernmentCVData = {
         'Coordinated vendors and technical teams.'
       ],
       achievements: [
-        'Successfully delivered 15 government ICT projects.',
+        'Successfully delivered 15 enterprise ICT projects.',
         'Managed project portfolio worth BDT 50 Crore.'
       ]
     },

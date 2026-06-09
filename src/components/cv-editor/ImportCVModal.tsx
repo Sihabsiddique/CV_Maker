@@ -14,7 +14,7 @@ import {
   Trash2, 
   FileCheck 
 } from 'lucide-react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
+import { useCVStore } from '@/store/cvStore';
 import { extractTextFromPDF, extractTextFromDOCX, parseRawTextToCVData, ParsedCV } from '@/utils/cvParser';
 
 interface ImportCVModalProps {
@@ -30,7 +30,7 @@ const ANALYSIS_STEPS = [
 ];
 
 export const ImportCVModal: React.FC<ImportCVModalProps> = ({ isOpen, onClose }) => {
-  const { updateCVData } = useGovernmentCVStore();
+  const { updateCVData } = useCVStore();
   
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState<'idle' | 'analyzing' | 'review'>('idle');
@@ -494,7 +494,7 @@ export const ImportCVModal: React.FC<ImportCVModalProps> = ({ isOpen, onClose })
                         </div>
                       </div>
 
-                      <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider pt-4">Government CV Demographics</h4>
+                      <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider pt-4">ATS CV Demographics</h4>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-[11px] font-bold text-gray-500 mb-1">Father's Name</label>

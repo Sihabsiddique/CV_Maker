@@ -2,39 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Sparkles, FolderOpen } from 'lucide-react';
-import { useGovernmentCVStore } from '@/store/governmentCVStore';
-import { governmentCVSchema } from '@/utils/governmentCVSchema';
-import { CandidateProfileSection } from './CandidateProfileSection';
+import { useCVStore } from '@/store/cvStore';
+import { cvSchema } from '@/utils/cvSchema';
+import { ProfileSection } from './ProfileSection';
 import { ExecutiveSummarySection } from './ExecutiveSummarySection';
-import { CompetencyProfileSection } from './CompetencyProfileSection';
-import { ProfessionalExperienceSection } from './ProfessionalExperienceSection';
-import { AcademicQualificationSection } from './AcademicQualificationSection';
-import { LanguageProficiencySection } from './LanguageProficiencySection';
-import { SupplementaryInformationSection } from './SupplementaryInformationSection';
+import { SkillsSection } from './SkillsSection';
+import { ExperienceSection } from './ExperienceSection';
+import { EducationSection } from './EducationSection';
+import { LanguagesSection } from './LanguagesSection';
+import { AdditionalInformationSection } from './AdditionalInformationSection';
 import { ExtracurricularActivitiesSection } from './ExtracurricularActivitiesSection';
 import { TemplateAppearanceControls } from '../cv-settings/TemplateAppearanceControls';
 import { ImportCVModal } from './ImportCVModal';
 
 export const ProfessionalCVEditor: React.FC = () => {
-  const { cvData, updateCVData } = useGovernmentCVStore();
+  const { cvData, updateCVData } = useCVStore();
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   // Initialize react-hook-form with Zod resolver casted to any to prevent schema assignment issues
   const methods = useForm<any>({
-    resolver: zodResolver(governmentCVSchema) as any,
+    resolver: zodResolver(cvSchema) as any,
     defaultValues: cvData,
     mode: 'onChange',
   });
 
   const { watch, reset } = methods;
 
+  const { getValues } = methods;
+
   // Sync form inputs when Zustand store changes externally (e.g. Generate Demo or CV Import)
   useEffect(() => {
-    const currentValues = methods.getValues();
+    const currentValues = getValues();
     if (JSON.stringify(currentValues) !== JSON.stringify(cvData)) {
       reset(cvData);
     }
-  }, [cvData, reset, methods]);
+  }, [cvData, reset, getValues]);
 
   // Real-time synchronization to Zustand store for instant Live HTML Preview updating
   useEffect(() => {
@@ -207,8 +209,8 @@ export const ProfessionalCVEditor: React.FC = () => {
       <div className="w-[45%] h-full bg-white border-r border-gray-200 flex flex-col z-10 shadow-lg">
         <div className="p-4 border-b border-gray-100 bg-white shrink-0 flex justify-between items-center">
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-gray-900">CVForge Editor</h1>
-            <p className="text-xs text-gray-500 font-medium text-blue-600">Government Digital Transformation Mode</p>
+            <h1 className="text-xl font-bold tracking-tight text-gray-900">CV Architect</h1>
+            <p className="text-xs text-gray-500 font-medium text-blue-600">ATS Structured Resume Design</p>
           </div>
           <div className="flex gap-2">
             <button
@@ -227,13 +229,13 @@ export const ProfessionalCVEditor: React.FC = () => {
         </div>
         
         <div className="flex-1 overflow-y-auto p-6 space-y-8 pb-32 custom-scrollbar">
-          <CandidateProfileSection />
+          <ProfileSection />
           <ExecutiveSummarySection />
-          <CompetencyProfileSection />
-          <ProfessionalExperienceSection />
-          <AcademicQualificationSection />
-          <LanguageProficiencySection />
-          <SupplementaryInformationSection />
+          <SkillsSection />
+          <ExperienceSection />
+          <EducationSection />
+          <LanguagesSection />
+          <AdditionalInformationSection />
           <ExtracurricularActivitiesSection />
           
           {/* Style Settings Section */}

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
-import { GovernmentCVData, AppearanceSettings } from '@/types/governmentCV.types';
+import { CVData, AppearanceSettings } from '@/types/cv.types';
 
 interface PDFProps {
-  data: GovernmentCVData;
+  data: CVData;
   settings: AppearanceSettings;
 }
 
-export const GovernmentCVPdfExporter: React.FC<PDFProps> = ({ data, settings }) => {
+export const PDFExporter: React.FC<PDFProps> = ({ data, settings }) => {
   // Calculate text colors based on darkness percentage
   const textVal = Math.round(180 * (1 - settings.textDarkness / 100));
   const textColor = `rgb(${textVal},${textVal},${textVal})`;

@@ -60,7 +60,7 @@ export const professionalCertificationSchema = z.object({
   name: z.string().min(1, "Certification name is required"),
 });
 
-export const governmentCVSchema = z.object({
+export const cvSchema = z.object({
   personalInfo: candidateProfileSchema,
   summary: z.string().optional(),
   skills: z.array(competencySchema).default([]),
@@ -71,4 +71,4 @@ export const governmentCVSchema = z.object({
   certifications: z.array(professionalCertificationSchema).default([]),
 });
 
-export type GovernmentCVFormValues = z.infer<typeof governmentCVSchema>;
+export type CVFormValues = z.infer<typeof cvSchema>;
