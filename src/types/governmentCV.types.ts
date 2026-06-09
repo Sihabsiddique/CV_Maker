@@ -176,3 +176,33 @@ export const initialGovernmentCVData: GovernmentCVData = {
     { id: 'ext3', role: 'Mentor', organization: 'Youth Technology Program' }
   ]
 };
+
+export interface AppearanceSettings {
+  candidateNameSize: number;
+  candidateNameWeight: '400' | '500' | '600' | '700' | '800';
+  contactInfoSize: number;
+  sectionHeadingSize: number;
+  sectionHeadingWeight: '400' | '500' | '600' | '700';
+  bodyTextSize: number;
+  experienceDescriptionSize: number;
+  textDarkness: number;
+  borderColor: string;
+  borderThickness: number;
+  borderOpacity: number;
+  borderWidthPercent: 80 | 90 | 100;
+}
+
+export const initialAppearanceSettings: AppearanceSettings = {
+  candidateNameSize: 32,
+  candidateNameWeight: '700',
+  contactInfoSize: 13,
+  sectionHeadingSize: 16,
+  sectionHeadingWeight: '700',
+  bodyTextSize: 13,
+  experienceDescriptionSize: 13,
+  textDarkness: 80,
+  borderColor: '#000000',
+  borderThickness: 1,
+  borderOpacity: 100,
+  borderWidthPercent: 100
+};
