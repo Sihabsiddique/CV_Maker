@@ -30,15 +30,25 @@ export const ProfessionalCVEditor: React.FC = () => {
 
   // Sync form inputs when Zustand store changes externally (e.g. Generate Demo or CV Import)
   useEffect(() => {
-    reset(cvData);
-  }, [cvData, reset]);
+    const currentValues = methods.getValues();
+    if (JSON.stringify(currentValues) !== JSON.stringify(cvData)) {
+      reset(cvData);
+    }
+  }, [cvData, reset, methods]);
 
   // Real-time synchronization to Zustand store for instant Live HTML Preview updating
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     const subscription = watch((value) => {
-      updateCVData(value as any);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        updateCVData(value as any);
+      }, 500);
     });
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timeoutId);
+      subscription.unsubscribe();
+    };
   }, [watch, updateCVData]);
 
   const handleGenerateDemoCV = () => {

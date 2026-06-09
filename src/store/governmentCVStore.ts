@@ -18,7 +18,13 @@ export const useGovernmentCVStore = create<GovernmentCVState>((set) => ({
   appearanceSettings: initialAppearanceSettings,
   isGeneratingPDF: false,
   activeTemplateId: 'executive',
-  updateCVData: (data) => set((state) => ({ cvData: { ...state.cvData, ...data } })),
+  updateCVData: (data) => set((state) => {
+    const isUnchanged = Object.keys(data).every(
+      (key) => JSON.stringify(state.cvData[key as keyof GovernmentCVData]) === JSON.stringify(data[key as keyof GovernmentCVData])
+    );
+    if (isUnchanged) return state;
+    return { cvData: { ...state.cvData, ...data } };
+  }),
   updateAppearanceSettings: (settings) => set((state) => ({ appearanceSettings: { ...state.appearanceSettings, ...settings } })),
   resetAppearanceSettings: () => set({ appearanceSettings: initialAppearanceSettings }),
   setGeneratingPDF: (isGenerating) => set({ isGeneratingPDF: isGenerating }),
